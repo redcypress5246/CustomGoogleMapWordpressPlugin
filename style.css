@@ -1,0 +1,11 @@
+[type=button]#refreshButton, button#refreshButton,
+#refreshButton{
+    border:1px solid #4AB596;
+    color:#fff;
+    background-color:  #4AB596;
+}
+[type=button]#refreshButton:hover, button#refreshButton:hover,
+#refreshButton:hover{
+    color:#4AB596;
+    background-color:  #fff;
+}
