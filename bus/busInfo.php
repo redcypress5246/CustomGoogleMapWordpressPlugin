@@ -1,18 +1,22 @@
 <?php
+
 $apiUrl = 'https://api.usft.com/v1/Location';
+$base64_credentials = $_GET['cred'];
+
 
 // cURL options
 $curlOptions = array(
     CURLOPT_URL => $apiUrl,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => array(
-        'Authorization: Basic Um05aEJjelgyZzdyR3dPVmk3ZkpUTld4Z1R3REhKSkY6OFoxdGdVYjlZSGZzdDJMT2J2WERkR29hWmVmUGdCUVA=',
+        'Authorization: Basic ' . $base64_credentials,
         'Content-Type: application/json',
         'access-control-allow-headers: Content-Type',
         'access-control-allow-methods: GET, POST',
         'access-control-max-age: 3600',
     ),
 );
+
 
 // Initialize cURL session
 $curl = curl_init();

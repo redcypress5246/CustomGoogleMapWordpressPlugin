@@ -13,8 +13,16 @@ function custom_google_map_shortcode()
     $plugin_url = plugins_url('/', __FILE__);
     $busImage = $plugin_url . 'images/bus.png';
     $breweryImage = $plugin_url . 'images/brewery.png';
-    $busPHP = $plugin_url . 'busInfo.php';
+    $busPHP = $plugin_url . 'bus/busInfo.php';
     $busCSS = $plugin_url . 'style.css';
+
+$gpsApiKey = get_option('custom_google_map_gps_api_key');
+$gpsApiSecret = get_option('custom_google_map_gps_api_secret');
+
+$credentials = $gpsApiKey . ':' . $gpsApiSecret;
+$base64_credentials = base64_encode($credentials);
+
+
     ob_start();
     ?>
 
@@ -208,7 +216,7 @@ function custom_google_map_shortcode()
                 document.getElementById('business-hours-message').innerHTML = '';
 
 
-                fetch('<?=$busPHP?>?timestamp=' + new Date().getTime())
+                fetch('<?=$busPHP?>?cred=<?=esc_attr($base64_credentials);?>&timestamp=' + new Date().getTime())
                 .then(response => response.json())
                 .then(data => {
                     // Process the API response (in 'data' variable)
@@ -306,6 +314,9 @@ add_action('admin_menu', 'custom_google_map_menu');
 function custom_google_map_settings()
 {
     register_setting('custom_google_map_settings_group', 'custom_google_map_api_key');
+    register_setting('custom_google_map_settings_group', 'custom_google_map_gps_api_key');
+    register_setting('custom_google_map_settings_group', 'custom_google_map_gps_api_secret');
+
     register_setting('custom_google_map_settings_group', 'custom_google_map_locations');
     register_setting('custom_google_map_settings_group', 'business_hours', 'sanitize_business_hours');
     register_setting('custom_google_map_settings_group', 'route1Locations', 'sanitize_route_locations');
@@ -440,6 +451,18 @@ function custom_google_map_settings_page()
                         <input type="text" name="custom_google_map_api_key"
                                value="<?php echo esc_attr(get_option('custom_google_map_api_key')); ?>" />
                     </td>
+                </tr>
+                <tr valign="top">
+                    <td>
+
+                        <h3>GPS Maps API Key:</h3>    
+                        <input type="text" name="custom_google_map_gps_api_key"
+                               value="<?php echo esc_attr(get_option('custom_google_map_gps_api_key')); ?>" />
+                        <h3>GPS Maps API Secret:</h3>    
+                        <input type="text" name="custom_google_map_gps_api_secret"
+                               value="<?php echo esc_attr(get_option('custom_google_map_gps_api_secret')); ?>" />
+                    
+                            </td>
                 </tr>
             </table>
             <?php submit_button(); ?>
